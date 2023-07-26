@@ -8,6 +8,7 @@ This is a further development of the original code by mjdyson. The following are
 - Improved error handling, eg. handling the lock-out by displaying a message
 
 # Lovelace card
+```
 type: entities
 entities:
   - entity: input_boolean.adgw_export_limit_on
@@ -28,17 +29,17 @@ entities:
   - entity: sensor.template_adgw_api_state
 title: Inverter settings
 show_header_toggle: false
-
+```
 ![image](https://github.com/KasperHolchKragelund/ad-growatt/assets/127233863/2f80a965-a0dc-490b-a89e-847fccf8242f)
 
 
 # Example of automation templates for automations.yaml
-
+```
 - id: 'XX'
   alias: Export Limit On
   description: When something happens, turn off export
   trigger:
-    # define your own trigger, eg. price from Nordpool
+    define your own trigger, eg. price from Nordpool
   condition:
   - condition: state
     entity_id: input_boolean.adgw_export_limit_on
@@ -52,7 +53,7 @@ show_header_toggle: false
   alias: Export Limit Off
   description: When something happens, turn off export
   trigger:
-    # define your own trigger, eg. price from Nordpool
+    define your own trigger, eg. price from Nordpool
   condition:
   - condition: state
     entity_id: input_boolean.adgw_export_limit_on
@@ -61,6 +62,7 @@ show_header_toggle: false
   - service: script.adgw_set_export_limit_off
     data: {}
   mode: single
+```
 
 # Disclaimer
 
