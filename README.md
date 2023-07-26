@@ -33,6 +33,35 @@ show_header_toggle: false
 ```
 ![image](https://github.com/KasperHolchKragelund/ad-growatt/assets/127233863/2f80a965-a0dc-490b-a89e-847fccf8242f)
 
+# Installation
+The steps to set up is:
+
+1. If you have the old Growatt integration installed, remove it, as it might trigger the server block on Growatt servers. For monitoring, use Grott https://github.com/johanmeijer/grott. This step is optional but will improve stability greatly.
+
+2. Install AppDaemon from Add-ons in HA
+
+3. Copy files from ad-growatt on Github to your config directory (/config on my HA Yellow, will use this path going foroward, but it might be different on your installation)
+
+4. Modify /config/configuration.yaml to include
+```
+homeassistant:
+  packages: !include_dir_named packages
+```
+
+5. Modify /config/secrets to include:
+```
+growatt_username: X
+growatt_password: X
+growatt_device: X
+```
+Replacing X’s with login, password and Device Serial Number (found on main page of Growatt Server: Login Page https://server.growatt.com/)
+
+6. Restart HA, or just reload HA configuration and restart AppDaemon
+
+7. Create the Lovelace card, see code above
+
+Enjoy controlling your Growatt inverter directly from HA !!
+
 
 # Example of automation templates for automations.yaml
 ```
@@ -84,5 +113,6 @@ Head on over to the Wiki pages to find out more >>
 # Credit
 
 Credit to the original authors at  
+https://github.com/mjdyson/ad-growatt
 https://github.com/indykoning/PyPi_GrowattServer/
 https://github.com/muppet3000/PyPi_GrowattServer/
