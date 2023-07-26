@@ -104,12 +104,6 @@ To the best of our knowledge only the settings functions perform modifications t
 
 The library is used entirely at your own risk.
 
-# Installation 
-
-Head on over to the Wiki pages to find out more >>  
-
-[https://github.com/mjdyson/ad-growatt/wiki](https://github.com/mjdyson/ad-growatt/wiki)
-
 # Credit
 
 Credit to the original authors at  
