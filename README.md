@@ -64,6 +64,7 @@ Enjoy controlling your Growatt inverter directly from HA !!
 
 
 # Example of automation templates for automations.yaml
+Automations can set the values on the Lovelace card and then push the button to Get or Save. Eg. the below example calls the script to turn on export limit, but only if the current condition of export limit is off (to avoid too many api calls)
 ```
 - id: 'XX'
   alias: Export Limit On
@@ -78,7 +79,9 @@ Enjoy controlling your Growatt inverter directly from HA !!
   - service: script.adgw_set_export_limit_on
     data: {}
   mode: single
-
+```
+And this example turns off export limit
+```
 - id: 'XX'
   alias: Export Limit Off
   description: When something happens, turn off export
