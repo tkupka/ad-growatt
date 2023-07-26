@@ -1,3 +1,0 @@
-#Add the following to your existing configurtation file
-homeassistant:
-  packages: !include_dir_named packages
