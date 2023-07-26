@@ -4,3 +4,4 @@ get_charge_settings:
   class: AD_Growatt
   growatt_username: !secret growatt_username
   growatt_password: !secret growatt_password
+  growatt_device: !secret growatt_device
