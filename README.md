@@ -6,6 +6,7 @@ This is a further development of the original code by mjdyson. The following are
 - Ability to control Grid First and Export Limit
 - UI now consists of one Lovelace card
 - Improved error handling, eg. handling the lock-out by displaying a message
+- Can only handle one inverter, specify Device Serial Number in secrets together with username and password for inverter
 
 # Lovelace card
 ```
