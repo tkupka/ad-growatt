@@ -29,6 +29,9 @@ entities:
 title: Inverter settings
 show_header_toggle: false
 
+![image](https://github.com/KasperHolchKragelund/ad-growatt/assets/127233863/2f80a965-a0dc-490b-a89e-847fccf8242f)
+
+
 # Example of automation templates for automations.yaml
 
 - id: 'XX'
