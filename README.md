@@ -56,9 +56,15 @@ growatt_device: X
 ```
 Replacing X’s with login, password and Device Serial Number (found on main page of Growatt Server: Login Page https://server.growatt.com/)
 
-6. Restart HA, or just reload HA configuration and restart AppDaemon
+6. Modify /appdaemon/appdaemon.yaml to include (to allow for longer timeouts for Growatt API calls):
+```
+appdaemon:
+  max_utility_skew: 30
+```
 
-7. Create the Lovelace card, see code above
+7. Restart HA, or just reload HA configuration and restart AppDaemon
+
+8. Create the Lovelace card, see code above
 
 Enjoy controlling your Growatt inverter directly from HA !!
 
