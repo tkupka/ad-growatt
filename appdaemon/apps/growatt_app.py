@@ -86,7 +86,7 @@ class AD_Growatt(hass.Hass):
         # Export limit save
         export_limit_on = convert_on_off(self.get_state("input_boolean.adgw_export_limit_on"))
         schedule_settings = [export_limit_on,   #Export limit - Eabled/Disabled (0/1)
-                                "100"]          #100% export limit
+                                "0"]            #0% export limit means all export is stopped
         response = api.update_mix_inverter_setting(device_sn, 'backflow_setting', schedule_settings)
         if response['success'] == True:
             self.set_state("sensor.template_adgw_api_state", state = "Export saved")
