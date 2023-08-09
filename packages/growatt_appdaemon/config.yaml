@@ -92,7 +92,7 @@ script:
           entity_id: input_boolean.adgw_export_limit_on
       - service: input_button.press
         target:
-          entity_id: input_button.adgw_set_charge_settings_button
+          entity_id: input_button.adgw_set_charge_settings_button_export
     mode: single
     icon: "mdi:toggle-switch-outline"
   # script to start export of electricity, can be called from Automations, eg. when power price is high
@@ -104,7 +104,7 @@ script:
           entity_id: input_boolean.adgw_export_limit_on
       - service: input_button.press
         target:
-          entity_id: input_button.adgw_set_charge_settings_button
+          entity_id: input_button.adgw_set_charge_settings_button_export
     mode: single
     icon: "mdi:toggle-switch-outline"
 
