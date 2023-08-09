@@ -10,6 +10,7 @@ This is a further development of the original code by mjdyson. The following are
 
 # Versions
 v0.1 July 13. 2023: initial release
+
 v0.2 August 8. 2023: version 0.2 released that seperates the save functions to avoid timeouts and API overload. Update config.yaml and growatt_app.py files + Lovelace card. Automations have to be changed to conform with new save
 
 # Lovelace card
