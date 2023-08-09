@@ -8,28 +8,35 @@ This is a further development of the original code by mjdyson. The following are
 - Improved error handling, eg. handling the lock-out by displaying a message
 - Can only handle one inverter, specify Device Serial Number in secrets together with username and password for inverter
 
+# Versions
+v0.1 July 13. 2023: initial release
+v0.2 August 8. 2023: version 0.2 released that seperates the save functions to avoid timeouts and API overload. Update config.yaml and growatt_app.py files + Lovelace card. Automations have to be changed to conform with new save
+
 # Lovelace card
 ```
 type: entities
 entities:
   - entity: input_boolean.adgw_export_limit_on
+  - entity: input_button.adgw_set_charge_settings_button_export
   - type: divider
   - entity: input_select.adgw_battery_charge_max_soc
   - entity: input_boolean.adgw_ac_charge_on
   - entity: input_datetime.adgw_battery_first_time_slot_1_start
   - entity: input_datetime.adgw_battery_first_time_slot_1_end
   - entity: input_boolean.adgw_battery_first_time_slot_1_enabled
+  - entity: input_button.adgw_set_charge_settings_button_battery_first
   - type: divider
   - entity: input_select.adgw_grid_discharge_stopped_soc
   - entity: input_datetime.adgw_grid_first_time_slot_1_start
   - entity: input_datetime.adgw_grid_first_time_slot_1_end
   - entity: input_boolean.adgw_grid_first_time_slot_1_enabled
+  - entity: input_button.adgw_set_charge_settings_button_grid_first
   - type: divider
   - entity: input_button.adgw_get_charge_settings_button
-  - entity: input_button.adgw_set_charge_settings_button
   - entity: sensor.template_adgw_api_state
 title: Inverter settings
 show_header_toggle: false
+
 ```
 ![image](https://github.com/KasperHolchKragelund/ad-growatt/assets/127233863/2f80a965-a0dc-490b-a89e-847fccf8242f)
 
@@ -64,17 +71,13 @@ Enjoy controlling your Growatt inverter directly from HA !!
 
 
 # Example of automation templates for automations.yaml
-Automations can set the values on the Lovelace card and then push the button to Get or Save. Eg. the below example calls the script to turn on export limit, but only if the current condition of export limit is off (to avoid too many api calls)
+Automations can set the values on the Lovelace card and then push the button to Get or Save. Eg. the below example calls the script to turn on export limit under certain condition, eg. price low:
 ```
 - id: 'XX'
   alias: Export Limit On
   description: When something happens, turn off export
   trigger:
     define your own trigger, eg. price from Nordpool
-  condition:
-  - condition: state
-    entity_id: input_boolean.adgw_export_limit_on
-    state: 'off'
   action:
   - service: script.adgw_set_export_limit_on
     data: {}
@@ -87,10 +90,6 @@ And this example turns off export limit
   description: When something happens, turn off export
   trigger:
     define your own trigger, eg. price from Nordpool
-  condition:
-  - condition: state
-    entity_id: input_boolean.adgw_export_limit_on
-    state: 'on'
   action:
   - service: script.adgw_set_export_limit_off
     data: {}
