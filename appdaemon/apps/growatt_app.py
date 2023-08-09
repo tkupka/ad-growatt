@@ -6,7 +6,9 @@ class AD_Growatt(hass.Hass):
 
     def initialize(self):
         self.listen_state(self.get_charge_settings, "input_button.adgw_get_charge_settings_button")
-        self.listen_state(self.set_charge_settings, "input_button.adgw_set_charge_settings_button")
+        self.listen_state(self.set_charge_settings_export, "input_button.adgw_set_charge_settings_button_export")
+        self.listen_state(self.set_charge_settings_battery, "input_button.adgw_set_charge_settings_button_battery_first")
+        self.listen_state(self.set_charge_settings_grid, "input_button.adgw_set_charge_settings_button_grid_first")
         #call get_charge_settings by pressing Get charge settings button
         self.call_service("input_button/press", entity_id="input_button.adgw_get_charge_settings_button")
 
@@ -66,7 +68,7 @@ class AD_Growatt(hass.Hass):
         else:
             self.set_state("sensor.template_adgw_api_state", state = "Error getting")
 
-    def set_charge_settings(self, entity, attribute, old, new, kwargs):
+    def set_charge_settings_export(self, entity, attribute, old, new, kwargs):
         #It's good practice to have those values stored in the secrets file
         un = self.args["growatt_username"]
         pwd = self.args["growatt_password"]
@@ -82,11 +84,10 @@ class AD_Growatt(hass.Hass):
             else:
                 self.set_state("sensor.template_adgw_api_state", state = "Error Msg " + session["msg"])
             return False
-
         # Export limit save
         export_limit_on = convert_on_off(self.get_state("input_boolean.adgw_export_limit_on"))
         schedule_settings = [export_limit_on,   #Export limit - Eabled/Disabled (0/1)
-                                "0"]            #0% export limit means all export is stopped
+                                "0"] #0% export limit means all export is stopped
         response = api.update_mix_inverter_setting(device_sn, 'backflow_setting', schedule_settings)
         if response['success'] == True:
             self.set_state("sensor.template_adgw_api_state", state = "Export saved")
@@ -94,6 +95,22 @@ class AD_Growatt(hass.Hass):
             self.set_state("sensor.template_adgw_api_state", state = "Error saving Export limit")
             return False
 
+    def set_charge_settings_battery(self, entity, attribute, old, new, kwargs):
+        #It's good practice to have those values stored in the secrets file
+        un = self.args["growatt_username"]
+        pwd = self.args["growatt_password"]
+        device_sn = self.args["growatt_device"]
+        #Query the server using the api
+        api = growattServer.GrowattApi(True) #get an instance of the api, using a random string as the ID
+        session = api.login(un, pwd) #login and return a session
+        if session['success'] == True: #Handle error message
+            self.set_state("sensor.template_adgw_api_state", state = "Initialized")
+        else:
+            if session["msg"] == "507":
+                self.set_state("sensor.template_adgw_api_state", state = "Locked " + session["lockDuration"] + " hours")
+            else:
+                self.set_state("sensor.template_adgw_api_state", state = "Error Msg " + session["msg"])
+            return False
         #Battery first save
         strings = self.get_state("input_datetime.adgw_battery_first_time_slot_1_start").split(":")
         start_time = [s.zfill(2) for s in strings]
@@ -123,6 +140,23 @@ class AD_Growatt(hass.Hass):
             self.set_state("sensor.template_adgw_api_state", state = "Error saving Battery first")
             return False
 
+    def set_charge_settings_grid(self, entity, attribute, old, new, kwargs):
+        #It's good practice to have those values stored in the secrets file
+        un = self.args["growatt_username"]
+        pwd = self.args["growatt_password"]
+        device_sn = self.args["growatt_device"]
+        #Query the server using the api
+        api = growattServer.GrowattApi(True) #get an instance of the api, using a random string as the ID
+        session = api.login(un, pwd) #login and return a session
+        if session['success'] == True: #Handle error message
+            self.set_state("sensor.template_adgw_api_state", state = "Initialized")
+        else:
+            if session["msg"] == "507":
+                self.set_state("sensor.template_adgw_api_state", state = "Locked " + session["lockDuration"] + " hours")
+            else:
+                self.set_state("sensor.template_adgw_api_state", state = "Error Msg " + session["msg"])
+            return False
+
         #Grid first save
         strings = self.get_state("input_datetime.adgw_grid_first_time_slot_1_start").split(":")
         start_time = [s.zfill(2) for s in strings]
@@ -149,8 +183,6 @@ class AD_Growatt(hass.Hass):
         else:
             self.set_state("sensor.template_adgw_api_state", state = "Error saving Grid first")
             return False
-
-        self.set_state("sensor.template_adgw_api_state", state = "Save success")
 
 def convert_on_off(value):
     # Function to convert on/off to 1/0
