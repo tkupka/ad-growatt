@@ -2,8 +2,14 @@ input_button:
   adgw_get_charge_settings_button: # button to get charge settings
     name: adgw_get_charge_settings_button
     icon: mdi:import
-  adgw_set_charge_settings_button: # button to set charge settings
-    name: adgw_set_charge_settings_button
+  adgw_set_charge_settings_button_export: # button to set charge settings
+    name: adgw_set_charge_settings_button_export
+    icon: mdi:export
+  adgw_set_charge_settings_button_battery_first: # button to set charge settings
+    name: adgw_set_charge_settings_button_battery_first
+    icon: mdi:export
+  adgw_set_charge_settings_button_grid_first: # button to set charge settings
+    name: adgw_set_charge_settings_button_grid_first
     icon: mdi:export
 
 input_select:
@@ -77,22 +83,6 @@ input_boolean:
     icon: mdi:toggle-switch-outline
 
 script:
-  adgw_reset_time_off_peak:
-    alias: adgw_reset_time_off_peak
-    sequence:
-      - service: input_datetime.set_datetime
-        data:
-          time: "00:30:00"
-        target:
-          entity_id: input_datetime.adgw_battery_first_time_slot_1_start
-      - service: input_datetime.set_datetime
-        data:
-          time: "04:30:00"
-        target:
-          entity_id: input_datetime.adgw_battery_first_time_slot_1_end
-    mode: single
-    icon: mdi:recycle-variant
-
   # script to stop export of electricity, can be called from Automations, eg. when power price is low
   adgw_set_export_limit_on:
     alias: adgw_set_export_limit_on
@@ -105,7 +95,6 @@ script:
           entity_id: input_button.adgw_set_charge_settings_button
     mode: single
     icon: "mdi:toggle-switch-outline"
-
   # script to start export of electricity, can be called from Automations, eg. when power price is high
   adgw_set_export_limit_off:
     alias: adgw_set_export_limit_off
@@ -124,6 +113,12 @@ template:
       - unique_id: adgw_api_state
         icon: "mdi:database"
         state: ""
+
+#  - binary_sensor:
+#      - name: "Cheapest hour"
+#        state: >-
+#          {% set l=state_attr('sensor.nordpool_kwh_dk1_dkk_2_10_0', 'raw_today') | sort(attribute='value') %}
+#          {{ l[0].start }}
 
 homeassistant:
   # customization of elements, setting name, icons etc.
@@ -158,5 +153,9 @@ homeassistant:
       friendly_name: API status
     input_button.adgw_get_charge_settings_button:
       friendly_name: Get charge settings from Server
-    input_button.adgw_set_charge_settings_button:
-      friendly_name: Set charge settings on Server
+    input_button.adgw_set_charge_settings_button_export:
+      friendly_name: Set export limit settings
+    input_button.adgw_set_charge_settings_button_battery_first:
+      friendly_name: Set charge battery first settings
+    input_button.adgw_set_charge_settings_button_grid_first:
+      friendly_name: Set charge grid first settings
