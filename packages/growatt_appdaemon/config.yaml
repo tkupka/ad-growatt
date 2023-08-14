@@ -45,6 +45,22 @@ input_select:
       - "90"
       - "100"
 
+  adgw_grid_discharge_power: # grid discharge power
+    name: adgw_grid_discharge_power
+    icon: mdi:battery-bluetooth
+    options:
+      - "0"
+      - "10"
+      - "20"
+      - "30"
+      - "40"
+      - "50"
+      - "60"
+      - "70"
+      - "80"
+      - "90"
+      - "100"
+
 input_datetime:
   adgw_battery_first_time_slot_1_end: # battery first, time inputs
     name: adgw_battery_first_time_slot_1_end
@@ -141,6 +157,8 @@ homeassistant:
     # grid first
     input_select.adgw_grid_discharge_stopped_soc:
       friendly_name: Discharge Stopped SoC
+    input_select.adgw_grid_discharge_power:
+      friendly_name: Discharge Power %
     input_datetime.adgw_grid_first_time_slot_1_end:
       friendly_name: Grid First - Time Slot 1 (End)
     input_datetime.adgw_grid_first_time_slot_1_start:
@@ -152,10 +170,10 @@ homeassistant:
     sensor.template_adgw_api_state:
       friendly_name: API status
     input_button.adgw_get_charge_settings_button:
-      friendly_name: Get charge settings from Server
+      friendly_name: Load charge settings from Server
     input_button.adgw_set_charge_settings_button_export:
-      friendly_name: Set export limit settings
+      friendly_name: Save export limit settings
     input_button.adgw_set_charge_settings_button_battery_first:
-      friendly_name: Set charge battery first settings
+      friendly_name: Save battery first settings
     input_button.adgw_set_charge_settings_button_grid_first:
-      friendly_name: Set charge grid first settings
+      friendly_name: Save grid first settings
