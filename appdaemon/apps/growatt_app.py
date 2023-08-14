@@ -6,9 +6,9 @@ class AD_Growatt(hass.Hass):
 
     def initialize(self):
         self.listen_state(self.get_charge_settings, "input_button.adgw_get_charge_settings_button")
-        self.listen_state(self.set_charge_settings_export, "input_button.adgw_set_charge_settings_button_export")
-        self.listen_state(self.set_charge_settings_battery, "input_button.adgw_set_charge_settings_button_battery_first")
-        self.listen_state(self.set_charge_settings_grid, "input_button.adgw_set_charge_settings_button_grid_first")
+        self.listen_state(self.set_charge_settings_export_handler, "input_button.adgw_set_charge_settings_button_export")
+        self.listen_state(self.set_charge_settings_battery_handler, "input_button.adgw_set_charge_settings_button_battery_first")
+        self.listen_state(self.set_charge_settings_grid_handler, "input_button.adgw_set_charge_settings_button_grid_first")
         #call get_charge_settings by pressing Get charge settings button
         self.call_service("input_button/press", entity_id="input_button.adgw_get_charge_settings_button")
 
@@ -51,6 +51,7 @@ class AD_Growatt(hass.Hass):
 
         # Populate Grid First
         self.set_state("input_select.adgw_grid_discharge_stopped_soc", state = response['obj']['mixBean']['wdisChargeSOCLowLimit2'])
+        self.set_state("input_select.adgw_grid_discharge_power", state = response['obj']['mixBean']['wdisChargeSOCLowLimit1'])
         self.set_state("input_datetime.adgw_grid_first_time_slot_1_start", state = response['obj']['mixBean']['forcedDischargeTimeStart1'])
         self.set_state("input_datetime.adgw_grid_first_time_slot_1_end", state = response['obj']['mixBean']['forcedDischargeTimeStop1'])
         if (response['obj']['mixBean']['forcedDischargeStopSwitch1']) == "1":
@@ -58,7 +59,7 @@ class AD_Growatt(hass.Hass):
         else:
             self.set_state ("input_boolean.adgw_grid_first_time_slot_1_enabled", state = "off")
 
-        #List all key pairs from response to log, comment out before going into production
+        #List all key pairs from response to log. Comment out before going into production
         #for key, value in response['obj']['mixBean'].items():
         #    self.log(f"{key}: {value}")
         #self.log (response)
@@ -68,7 +69,7 @@ class AD_Growatt(hass.Hass):
         else:
             self.set_state("sensor.template_adgw_api_state", state = "Error getting")
 
-    def set_charge_settings_export(self, entity, attribute, old, new, kwargs):
+    def set_charge_settings_export(self):
         #It's good practice to have those values stored in the secrets file
         un = self.args["growatt_username"]
         pwd = self.args["growatt_password"]
@@ -91,11 +92,17 @@ class AD_Growatt(hass.Hass):
         response = api.update_mix_inverter_setting(device_sn, 'backflow_setting', schedule_settings)
         if response['success'] == True:
             self.set_state("sensor.template_adgw_api_state", state = "Export saved")
+            return True
         else:
-            self.set_state("sensor.template_adgw_api_state", state = "Error saving Export limit")
+            self.set_state("sensor.template_adgw_api_state", state = "Error saving Export limit: "  + response['msg'])
             return False
 
-    def set_charge_settings_battery(self, entity, attribute, old, new, kwargs):
+    def set_charge_settings_export_handler(self, entity, attribute, old, new, kwargs):
+        for attempt in range(5):
+            if self.set_charge_settings_export() == True:
+                break
+
+    def set_charge_settings_battery(self):
         #It's good practice to have those values stored in the secrets file
         un = self.args["growatt_username"]
         pwd = self.args["growatt_password"]
@@ -136,11 +143,17 @@ class AD_Growatt(hass.Hass):
         response = api.update_mix_inverter_setting(device_sn, 'mix_ac_charge_time_period', schedule_settings)
         if response['success'] == True:
             self.set_state("sensor.template_adgw_api_state", state = "Battery first saved")
+            return True
         else:
-            self.set_state("sensor.template_adgw_api_state", state = "Error saving Battery first")
+            self.set_state("sensor.template_adgw_api_state", state = "Error saving Battery first: "  + response['msg'])
             return False
 
-    def set_charge_settings_grid(self, entity, attribute, old, new, kwargs):
+    def set_charge_settings_battery_handler(self, entity, attribute, old, new, kwargs):
+        for attempt in range(5):
+            if self.set_charge_settings_battery() == True:
+                break
+
+    def set_charge_settings_grid(self):
         #It's good practice to have those values stored in the secrets file
         un = self.args["growatt_username"]
         pwd = self.args["growatt_password"]
@@ -163,10 +176,11 @@ class AD_Growatt(hass.Hass):
         strings = self.get_state("input_datetime.adgw_grid_first_time_slot_1_end").split(":")
         end_time = [s.zfill(2) for s in strings]
         discharge_stopped_soc = self.get_state("input_select.adgw_grid_discharge_stopped_soc")
+        discharge_power = self.get_state("input_select.adgw_grid_discharge_power")
         time_slot_1_enabled = convert_on_off(self.get_state("input_boolean.adgw_grid_first_time_slot_1_enabled"))
         # Create dictionary of settings to apply through the api call. The order of these elements is important.
-        schedule_settings = ["100", #Discharging power %
-                                discharge_stopped_soc.replace("%", ""), #Stop charging SoC %
+        schedule_settings = [discharge_power, #Discharging power %
+                                discharge_stopped_soc, #Stop charging SoC %
                                 start_time[0], start_time[1], #Schedule 1 - Start time
                                 end_time[0], end_time[1], #Schedule 1 - End time
                                 time_slot_1_enabled,        #Schedule 1 - Enabled/Disabled (1 = Enabled)
@@ -180,9 +194,16 @@ class AD_Growatt(hass.Hass):
         response = api.update_mix_inverter_setting(device_sn, 'mix_ac_discharge_time_period', schedule_settings)
         if response['success'] == True:
             self.set_state("sensor.template_adgw_api_state", state = "Grid first saved")
+            return True
         else:
-            self.set_state("sensor.template_adgw_api_state", state = "Error saving Grid first")
+            self.set_state("sensor.template_adgw_api_state", state = "Error saving Grid first: " + response['msg'])
             return False
+
+    def set_charge_settings_grid_handler(self, entity, attribute, old, new, kwargs):
+        for attempt in range(5):
+            if self.set_charge_settings_grid() == True:
+                break
+
 
 def convert_on_off(value):
     # Function to convert on/off to 1/0
@@ -190,3 +211,7 @@ def convert_on_off(value):
         return "1"
     else:
         return "0"
+
+#    def set_grid_first_morning(self, entity, attribute, old, new, kwargs):
+#        self.set_state("input_datetime.adgw_grid_first_time_slot_1_start", state "07")
+#        self.set_state("input_datetime.adgw_grid_first_time_slot_1_end", "08")
