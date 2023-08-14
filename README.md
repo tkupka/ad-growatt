@@ -11,7 +11,9 @@ This is a further development of the original code by mjdyson. The following are
 # Versions
 v0.1 July 13. 2023: initial release
 
-v0.2 August 8. 2023: version 0.2 released that seperates the save functions to avoid timeouts and API overload. Update config.yaml and growatt_app.py files + Lovelace card. Automations have to be changed to conform with new save
+v0.2 August 8. 2023: Seperates the save functions to avoid timeouts and API overload. Update config.yaml and growatt_app.py files + Lovelace card. Automations have to be changed to conform with new save
+
+v.03 August 14 2023: Control of "Grid first, discharge power" implemented together with other improvements, eg. more robustnness when saving; now retrying 5 times, if theres's a problem with Growatt server. Remember to update the Lovelace card with the code below.
 
 # Lovelace card
 ```
@@ -28,6 +30,7 @@ entities:
   - entity: input_button.adgw_set_charge_settings_button_battery_first
   - type: divider
   - entity: input_select.adgw_grid_discharge_stopped_soc
+  - entity: input_select.adgw_grid_discharge_power
   - entity: input_datetime.adgw_grid_first_time_slot_1_start
   - entity: input_datetime.adgw_grid_first_time_slot_1_end
   - entity: input_boolean.adgw_grid_first_time_slot_1_enabled
@@ -37,9 +40,8 @@ entities:
   - entity: sensor.template_adgw_api_state
 title: Inverter settings
 show_header_toggle: false
-
 ```
-![image](https://github.com/KasperHolchKragelund/ad-growatt/assets/127233863/2f80a965-a0dc-490b-a89e-847fccf8242f)
+![image](https://github.com/KasperHolchKragelund/ad-growatt/assets/127233863/884fef5f-f24a-4b08-b74e-34e9420f763d)
 
 # Installation
 The steps to set up is:
