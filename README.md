@@ -3,7 +3,7 @@
 An AppDaemon App Example for controlling Growatt Inverters via HomeAssistant.
 
 This is a further development of the original code by mjdyson. The following are the main changes:
-- Ability to control Grid First and Export Limit
+- Ability to control Grid First, Battery First and Export Limit
 - UI now consists of one Lovelace card
 - Improved error handling, eg. handling the lock-out by displaying a message
 - Can only handle one inverter, specify Device Serial Number in secrets together with username and password for inverter
