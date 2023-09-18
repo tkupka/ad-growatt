@@ -125,9 +125,10 @@ class AD_Growatt(hass.Hass):
         end_time = [s.zfill(2) for s in strings]
         charge_final_soc = self.get_state("input_select.adgw_battery_charge_max_soc")
         ac_charge_on = convert_on_off(self.get_state("input_boolean.adgw_ac_charge_on"))
+        charge_power = self.get_state("input_select.adgw_grid_charge_power")
         time_slot_1_enabled = convert_on_off(self.get_state("input_boolean.adgw_battery_first_time_slot_1_enabled"))
         # Create dictionary of settings to apply through the api call. The order of these elements is important.
-        schedule_settings = ["100", #Charging power %
+        schedule_settings = [charge_power, #Charging power %
                                 charge_final_soc.replace("%", ""), #Stop charging SoC %
                                 ac_charge_on,   #Allow AC charging (1 = Enabled)
                                 start_time[0], start_time[1], #Schedule 1 - Start time
