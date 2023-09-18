@@ -23,6 +23,7 @@ entities:
   - entity: input_button.adgw_set_charge_settings_button_export
   - type: divider
   - entity: input_select.adgw_battery_charge_max_soc
+  - entity: input_select.adgw_grid_charge_power
   - entity: input_boolean.adgw_ac_charge_on
   - entity: input_datetime.adgw_battery_first_time_slot_1_start
   - entity: input_datetime.adgw_battery_first_time_slot_1_end
