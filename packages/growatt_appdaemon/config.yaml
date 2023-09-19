@@ -140,6 +140,29 @@ script:
           entity_id: input_button.adgw_set_charge_settings_button_export
     mode: single
     icon: "mdi:toggle-switch-outline"
+  # script to set battery first, can be called from Automations, eg. when power price is low
+  adgw_set_battery_first_on:
+    alias: adgw_battery_first_on
+    sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.adgw_battery_first_time_slot_1_enabled
+      - service: input_button.press
+        target:
+          entity_id: input_button.adgw_set_charge_settings_button_battery_first
+    mode: single
+    icon: "mdi:toggle-switch-outline"
+  adgw_set_battery_first_off:
+    alias: adgw_set_battery_first_off
+    sequence:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.adgw_battery_first_time_slot_1_enabled
+      - service: input_button.press
+        target:
+          entity_id: input_button.adgw_set_charge_settings_button_battery_first
+    mode: single
+    icon: "mdi:toggle-switch-outline"
 
 template:
   - sensor:
