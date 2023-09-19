@@ -13,7 +13,9 @@ v0.1 July 13. 2023: initial release
 
 v0.2 August 8. 2023: Seperates the save functions to avoid timeouts and API overload. Update config.yaml and growatt_app.py files + Lovelace card. Automations have to be changed to conform with new save
 
-v.03 August 14 2023: Control of "Grid first, discharge power" implemented together with other improvements, eg. more robustnness when saving; now retrying 5 times, if theres's a problem with Growatt server. Remember to update the Lovelace card with the code below.
+v.03 August 14. 2023: Control of "Grid first, discharge power" implemented together with other improvements, eg. more robustnness when saving; now retrying 5 times, if theres's a problem with Growatt server. Remember to update the Lovelace card with the code below.
+
+v.04 September 19. 2023: Charge power setting added, thanks to Jasperwolsing. Services adgw_battery_first_on and adgw_battery_first_off added to control the battery first state on/off from scripts. 
 
 # Lovelace card
 ```
