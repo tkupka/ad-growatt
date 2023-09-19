@@ -62,9 +62,9 @@ class AD_Growatt(hass.Hass):
             self.set_state ("input_boolean.adgw_grid_first_time_slot_1_enabled", state = "off")
 
         #List all key pairs from response to log. Comment out before going into production
-        for key, value in response['obj']['mixBean'].items():
-            self.log(f"{key}: {value}")
-        self.log (response)
+        #for key, value in response['obj']['mixBean'].items():
+        #    self.log(f"{key}: {value}")
+        #self.log (response)
 
         if (response['result']) == 1: # Set status in UI
             self.set_state("sensor.template_adgw_api_state", state = "Get success")
