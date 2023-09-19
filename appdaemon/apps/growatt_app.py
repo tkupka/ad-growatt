@@ -38,6 +38,8 @@ class AD_Growatt(hass.Hass):
 
         # Populate Battery First
         self.set_state("input_select.adgw_battery_charge_max_soc", state = response['obj']['mixBean']['wchargeSOCLowLimit2'])
+        self.set_state("input_select.adgw_grid_charge_power", state = response['obj']['mixBean']['chargePowerCommand'])
+        
         if (response['obj']['mixBean']['acChargeEnable']) == "1":
             self.set_state ("input_boolean.adgw_ac_charge_on", state = "on")
         else:
@@ -60,9 +62,9 @@ class AD_Growatt(hass.Hass):
             self.set_state ("input_boolean.adgw_grid_first_time_slot_1_enabled", state = "off")
 
         #List all key pairs from response to log. Comment out before going into production
-        #for key, value in response['obj']['mixBean'].items():
-        #    self.log(f"{key}: {value}")
-        #self.log (response)
+        for key, value in response['obj']['mixBean'].items():
+            self.log(f"{key}: {value}")
+        self.log (response)
 
         if (response['result']) == 1: # Set status in UI
             self.set_state("sensor.template_adgw_api_state", state = "Get success")
@@ -212,7 +214,3 @@ def convert_on_off(value):
         return "1"
     else:
         return "0"
-
-#    def set_grid_first_morning(self, entity, attribute, old, new, kwargs):
-#        self.set_state("input_datetime.adgw_grid_first_time_slot_1_start", state "07")
-#        self.set_state("input_datetime.adgw_grid_first_time_slot_1_end", "08")
