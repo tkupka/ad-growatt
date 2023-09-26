@@ -18,7 +18,7 @@ class AD_Growatt(hass.Hass):
         pwd = self.args["growatt_password"]
         device_sn = self.args["growatt_device"]
         #Query the server using the api
-        api = growattServer.GrowattApi(True) #get an instance of the api, using a random string as the ID
+        api = growattServer.GrowattApi() #get an instance of the api, using a random string as the ID
         session = api.login(un, pwd) #login and return a session
         if session['success'] == True: #Handle error message
             self.set_state("sensor.template_adgw_api_state", state = "Initialized")
@@ -77,7 +77,7 @@ class AD_Growatt(hass.Hass):
         pwd = self.args["growatt_password"]
         device_sn = self.args["growatt_device"]
         #Query the server using the api
-        api = growattServer.GrowattApi(True) #get an instance of the api, using a random string as the ID
+        api = growattServer.GrowattApi() #get an instance of the api, using a random string as the ID
         session = api.login(un, pwd) #login and return a session
         if session['success'] == True: #Handle error message
             self.set_state("sensor.template_adgw_api_state", state = "Initialized")
@@ -110,7 +110,7 @@ class AD_Growatt(hass.Hass):
         pwd = self.args["growatt_password"]
         device_sn = self.args["growatt_device"]
         #Query the server using the api
-        api = growattServer.GrowattApi(True) #get an instance of the api, using a random string as the ID
+        api = growattServer.GrowattApi() #get an instance of the api, using a random string as the ID
         session = api.login(un, pwd) #login and return a session
         if session['success'] == True: #Handle error message
             self.set_state("sensor.template_adgw_api_state", state = "Initialized")
@@ -162,7 +162,7 @@ class AD_Growatt(hass.Hass):
         pwd = self.args["growatt_password"]
         device_sn = self.args["growatt_device"]
         #Query the server using the api
-        api = growattServer.GrowattApi(True) #get an instance of the api, using a random string as the ID
+        api = growattServer.GrowattApi() #get an instance of the api, using a random string as the ID
         session = api.login(un, pwd) #login and return a session
         if session['success'] == True: #Handle error message
             self.set_state("sensor.template_adgw_api_state", state = "Initialized")
