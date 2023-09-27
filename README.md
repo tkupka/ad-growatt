@@ -17,7 +17,7 @@ v.03 August 14. 2023: Control of "Grid first, discharge power" implemented toget
 
 v.04 September 19. 2023: Charge power setting added, thanks to Jasperwolsing (added getting charge power on top of the Jasperwolsing change). Services adgw_battery_first_on and adgw_battery_first_off added to control the battery first state on/off from scripts. 
 
-v.041 September 26. 2023: Corrected error during API initialization. Probably introduced by newer Python version.
+v.041 September 26. 2023: Changed initialization to more correctly show if there's a 50x error.
 
 # Lovelace card
 ```
