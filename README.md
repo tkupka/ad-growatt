@@ -8,6 +8,9 @@ This is a further development of the original code by mjdyson. The following are
 - Improved error handling, eg. handling the lock-out by displaying a message
 - Can only handle one inverter, specify Device Serial Number in secrets together with username and password for inverter
 
+!! Growatt API was updated during September 2023. That update pretty much broke all Growatt integrations. Growatt is not offering any solutions, they focus on blocking enthusiast trying to make Growatt products work with home automation. Currently this code (AD Growatt) is not working due to Growatt servers blocking access. It might work again some time in the future and everyone are very welcome to try to use my code for future versions.
+Personally I gave up on Growatt servers and will be using Solar Assistant going forward. So Long, and Thanks for All the Fish :)
+
 # Versions
 v0.1 July 13. 2023: initial release
 
