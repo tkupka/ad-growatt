@@ -1170,7 +1170,8 @@ cards:
       - entity: sensor.template_adgw_api_state
 
 ```
-![image](https://github.com/KasperHolchKragelund/ad-growatt/assets/127233863/884fef5f-f24a-4b08-b74e-34e9420f763d)
+![image](./ui.png)
+
 
 # Installation
 The steps to set up is:
