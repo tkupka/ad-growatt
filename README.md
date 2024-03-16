@@ -79,7 +79,7 @@ Replacing X’s with login, password and Device Serial Number (found on main pag
 Enjoy controlling your Growatt inverter directly from HA !!
 
 # UI Dependencies
-Following dependencies are used in UI card:
+Following dependencies are used by UI card:
 
 * <a href="https://github.com/kinghat/tabbed-card">Tabbed Card</a>
 * <a href="https://github.com/custom-cards/stack-in-card">Stack In Card</a>
