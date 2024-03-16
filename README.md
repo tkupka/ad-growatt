@@ -1226,6 +1226,18 @@ Replacing X’s with login, password and Device Serial Number (found on main pag
 
 Enjoy controlling your Growatt inverter directly from HA !!
 
+#UI Dependencies
+Following dependencies are used in UI card:
+
+* <a href="https://github.com/kinghat/tabbed-card">Tabbed Card</a>
+* <a href="https://github.com/custom-cards/stack-in-card">Stack In Card</a>
+* <a href="https://github.com/mattieha/slider-button-card">Slider button card</a>
+* <a href="https://github.com/custom-cards/button-card">Button Card</a>
+* <a href="https://github.com/GeorgeSG/lovelace-time-picker-card">Time Picker Card</a>
+* <a href="https://github.com/custom-cards/button-card">Button Card</a>
+ 
+
+
 
 # Example of automation templates for automations.yaml
 Automations can set the values on the Lovelace card and then push the button to Get or Save. Eg. the below example calls the script to turn on export limit under certain condition, eg. price low:
