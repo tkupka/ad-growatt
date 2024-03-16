@@ -1,6 +1,8 @@
 name = "growattServer"
 
 import datetime
+import time
+from datetime import timedelta
 from enum import IntEnum
 import hashlib
 import json
@@ -24,22 +26,38 @@ class Timespan(IntEnum):
     month = 2
 
 class GrowattApi:
-    server_url = 'https://server-api.growatt.com/'
-    agent_identifier = "Dalvik/2.1.0 (Linux; U; Android 12; https://github.com/indykoning/PyPi_GrowattServer)"
+    
+    hass = ''
+    logger = ''
+    sesion_duration = timedelta(minutes=30)
+    server_url = 'https://openapi.growatt.com/'
+    username = 'undefined'
+    password = 'undefined'
+    device_sn = 'undefined'
+    agent_identifier_pattern = "Dalvik/2.0.0 (Linux; U; Android 13; HA:%s%s)"
+    login_time = datetime.datetime.now()
+    user_data = ''
+    
 
-    def __init__(self, add_random_user_id=False, agent_identifier=None):
+    def __init__(self, username, password, device_sn, hass, logger, add_random_user_id=False, agent_identifier=None):
+    
+        self.username = username
+        self.password = password
+        self.device_sn = device_sn
+        self.hass = hass #just for logging
+        self.logger = logger #just for logging
         if (agent_identifier != None):
-            self.agent_identifier = agent_identifier
+            self.agent_identifier_pattern = agent_identifier
 
         #If a random user id is required, generate a 5 digit number and add it to the user agent
         if (add_random_user_id):
             random_number = ''.join(["{}".format(randint(0,9)) for num in range(0,50)])
-            self.agent_identifier = random_number
+            self.agent_identifier_pattern = random_number
 
         self.session = requests.Session()
+        self.login_time = datetime.datetime.now() - timedelta(minutes=50)
+        self.check_session()
 
-        headers = {'User-Agent': self.agent_identifier}
-        self.session.headers.update(headers)
 
     def __get_date_string(self, timespan=None, date=None):
         if timespan is not None:
@@ -62,7 +80,33 @@ class GrowattApi:
         """
         return self.server_url + page
 
-    def login(self, username, password, is_password_hashed=False):
+    def check_session(self):
+        self.hass.log("Checking session....")
+        self.logger.info("Checking Session..")
+        session_refresh_time = self.login_time + self.sesion_duration
+        self.hass.log("Session refresh time: %s"%session_refresh_time)
+        sleep_time = 1
+        if datetime.datetime.now() > session_refresh_time:
+            self.hass.log("Logging...")
+            
+            for x in range(10):
+                login_status = self.login()
+                self.hass.log("Login status: %s"%login_status)
+                if login_status != False:
+                    self.hass.log("Login success....")
+                    self.logger.info("Login success")
+                    self.login_time = datetime.datetime.now()
+                    self.hass.log("Login time: %s"%self.login_time)
+                    break
+                
+                self.hass.log("Login failed, trying again after [%s]s"%sleep_time)
+                self.logger.info("Login failed, trying again after [%s]s"%sleep_time)
+                time.sleep(sleep_time)
+                sleep_time = sleep_time * 2
+        self.logger.info("Session active, processing action")
+        return True
+
+    def login(self, is_password_hashed=False):
         """
         Log the user in.
 
@@ -122,25 +166,73 @@ class GrowattApi:
             'isBigCustomer'
             'noticeType'
         """
-        if not is_password_hashed:
-            password = hash_password(password)
+        currentTime = datetime.datetime.now().strftime('%Y%m%d%H%M')
+        agent_identifier = self.agent_identifier_pattern%(self.device_sn,currentTime)
+        headers = {'User-Agent': agent_identifier}
+        self.session.headers.update(headers)
 
-        response = self.session.post(self.get_url('newTwoLoginAPI.do'), data={
-            'userName': username,
-            'password': password
+        if not is_password_hashed:
+            password = hash_password(self.password)
+
+        #response = self.session.post(self.get_url('newTwoLoginAPI.do'), data={
+        #    'userName': self.username,
+        #    'password': '',
+        #    'type': '1'
+        #    'loginTime': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        #    'passwordCrc': password
+        response = self.session.post(self.get_url('login'), data={
+            'account': self.username,
+            'password': '',
+            'passwordCrc': password
+        
         })
-        data = json.loads(response.content.decode('utf-8'))['back']
-        if data['success']:
-            data.update({
-                'userId': data['user']['id'],
-                'userLevel': data['user']['rightlevel']
-            })
+        self.hass.log("Headers: %s" % headers)
+        self.hass.log("Login URL: %s" % self.get_url('newTwoLoginAPI.do'))
+        self.hass.log("Login user: %s" % self.username)
+        self.hass.log("Login Password: %s" % password)
+        self.hass.log("Login Response from Growatt: %s" % response)
+        self.hass.log("Login Response Code from Growatt: %s" % response.status_code)
+        self.hass.log("Login Response content from Growatt: %s" % response.content)
+
+        if response.status_code != 200:
+            ##raise RuntimeError("Request failed: %s", response)
+            self.logger.error("Response Code " + str(response.status_code))
+            return False
+        #data = json.loads(response.content.decode('utf-8'))['back']
+        #if data['success']:
+        #    data.update({
+        #        'userId': data['user']['id'],
+        #        'userLevel': data['user']['rightlevel']
+        #    })
+        #user_data = data
+        self.hass.log("Login Response code passed")
+        data = json.loads(response.content.decode('utf-8'))['result']
+        self.hass.log("Login Response data: %s" % data)
+        if data != 1:
+            return False
+        
+        self.login_time = datetime.datetime.now()
+        
+        #if data['success'] == True: #Handle error message
+        if data == 1:
+            self.logger.info("Initialized")
+        else:
+            if data["msg"] == "507":
+                self.logger.error("Locked " + data["lockDuration"] + " hours")
+            else:
+                self.logger.error(data["msg"])
+            return False
+        
         return data
+        """
+        return "dummy"
+        """
 
     def plant_list(self, user_id):
         """
         Get a list of plants connected to this account.
         """
+        self.check_session()
         response = self.session.get(self.get_url('PlantListAPI.do'),
                                     params={'userId': user_id},
                                     allow_redirects=False)
@@ -167,6 +259,7 @@ class GrowattApi:
         """
         Get inverter data for specified date or today.
         """
+        self.check_session()
         date_str = self.__get_date_string(date=date)
         response = self.session.get(self.get_url('newInverterAPI.do'), params={
             'op': 'getInverterData',
@@ -181,6 +274,7 @@ class GrowattApi:
         """
         Get "All parameters" from PV inverter.
         """
+        self.check_session()
         response = self.session.get(self.get_url('newInverterAPI.do'), params={
             'op': 'getInverterDetailData',
             'inverterId': inverter_id
@@ -193,6 +287,7 @@ class GrowattApi:
         """
         Get "All parameters" from PV inverter.
         """
+        self.check_session()
         response = self.session.get(self.get_url('newInverterAPI.do'), params={
             'op': 'getInverterDetailData_two',
             'inverterId': inverter_id
@@ -205,6 +300,7 @@ class GrowattApi:
         """
         Get inverter data for specified date or today.
         """
+        self.check_session()
         date_str = self.__get_date_string(date=date)
         response = self.session.get(self.get_url('newTlxApi.do'), params={
             'op': 'getTlxData',
@@ -219,6 +315,7 @@ class GrowattApi:
         """
         Get "All parameters" from PV inverter.
         """
+        self.check_session()
         response = self.session.get(self.get_url('newTlxApi.do'), params={
             'op': 'getTlxDetailData',
             'id': tlx_id
@@ -258,6 +355,7 @@ class GrowattApi:
         'vpv1' -- Voltage PV1
         'vpv2' -- Voltage PV2
         """
+        self.check_session()
         request_params={
             'op': 'getMixInfo',
             'mixId': mix_id
@@ -294,6 +392,7 @@ class GrowattApi:
         'photovoltaicRevenueTotal' -- Revenue earned from PV total (all time) in 'unit' currency
         'unit' -- Unit of currency for 'Revenue'
         """
+        self.check_session()
         response = self.session.post(self.get_url('newMixApi.do'), params={
             'op': 'getEnergyOverview',
             'mixId': mix_id,
@@ -337,6 +436,7 @@ class GrowattApi:
         'vac1' -- Grid voltage in V (same as vAc1)
         'wBatteryType' -- ??? 1
         """
+        self.check_session()
         response = self.session.post(self.get_url('newMixApi.do'), params={
             'op': 'getSystemStatus_KW',
             'mixId': mix_id,
@@ -395,6 +495,7 @@ class GrowattApi:
         Solar to Battery = Solar Generation - Export to Grid - Load consumption from solar
                            epvToday (from mix_info) - eAcCharge - eChargeToday
         """
+        self.check_session()
         date_str = self.__get_date_string(timespan, date)
 
         response = self.session.post(self.get_url('newMixApi.do'), params={
@@ -454,6 +555,7 @@ class GrowattApi:
         'ratio5' -- % of Self consumption that is from batteries e.g. '92.1%' (not accurate for Mix systems)
         'ratio6' -- % of Self consumption that is directly from Solar e.g. '7.9%' (not accurate for Mix systems)
         """
+        self.check_session()
         date_str = self.__get_date_string(timespan, date)
 
         response = self.session.post(self.get_url('newPlantAPI.do'), params={
@@ -470,6 +572,7 @@ class GrowattApi:
         """
         Get "All parameters" from battery storage.
         """
+        self.check_session()
         response = self.session.get(self.get_url('newStorageAPI.do'), params={
             'op': 'getStorageInfo_sacolar',
             'storageId': storage_id
@@ -482,6 +585,7 @@ class GrowattApi:
         """
         Get much more detail from battery storage.
         """
+        self.check_session()
         response = self.session.get(self.get_url('newStorageAPI.do'), params={
             'op': 'getStorageParams_sacolar',
             'storageId': storage_id
@@ -494,6 +598,7 @@ class GrowattApi:
         """
         Get some energy/generation overview data.
         """
+        self.check_session()
         response = self.session.post(self.get_url('newStorageAPI.do?op=getEnergyOverviewData_sacolar'), params={
             'plantId': plant_id,
             'storageSn': storage_id
@@ -519,6 +624,7 @@ class GrowattApi:
         """
         Get basic plant information with device list.
         """
+        self.check_session()
         response = self.session.get(self.get_url('newTwoPlantAPI.do'), params={
             'op': 'getAllDeviceList',
             'plantId': plant_id,
@@ -539,6 +645,7 @@ class GrowattApi:
         Returns:
         A python dictionary containing the settings for the specified plant
         """
+        self.check_session()
         response = self.session.get(self.get_url('newPlantAPI.do'), params={
             'op': 'getPlant',
             'plantId': plant_id
@@ -559,6 +666,7 @@ class GrowattApi:
         Returns:
         A response from the server stating whether the configuration was successful or not
         """
+        self.check_session()
         #If no existing settings have been provided then get them from the growatt server
         if current_settings == None:
             current_settings = self.get_plant_settings(plant_id)
@@ -593,7 +701,7 @@ class GrowattApi:
         data = json.loads(response.content.decode('utf-8'))
         return data
 
-    def update_mix_inverter_setting(self, serial_number, setting_type, parameters):
+    def update_mix_inverter_setting(self, setting_type, parameters, oldApi=False):
         """
         Applies settings for specified system based on serial number
         See README for known working settings
@@ -606,6 +714,7 @@ class GrowattApi:
         Returns:
         A response from the server stating whether the configuration was successful or not
         """
+        self.check_session()
         setting_parameters = parameters
 
         #If we've been passed an array then convert it into a dictionary
@@ -613,20 +722,26 @@ class GrowattApi:
             setting_parameters = {}
             for index, param in enumerate(parameters, start=1):
                 setting_parameters['param' + str(index)] = param
-
+        setting_parameters['deviceType'] = '17'
         default_params = {
             'op': 'mixSetApiNew',
-            'serialNum': serial_number,
+            'action': 'mixSet',
+            'serialNum': self.device_sn,
             'type': setting_type
         }
         settings_params = {**default_params, **setting_parameters}
-        response = self.session.post(self.get_url('newTcpsetAPI.do'), params=settings_params)
+        
+        action = 'newTcpsetAPI.do'
+        if oldApi == True:
+            action = 'tcpSet.do'
+        self.hass.log("Action: [%s], Setting param: %s"%(action, settings_params))
+        response = self.session.post(self.get_url(action), params=settings_params)
         data = json.loads(response.content.decode('utf-8'))
         return data
 
     #Change - This is where the mechanism for setting parameters of charging parameters is done.
     #It's additional to the main growattServer project.
-    def get_mix_inverter_settings(self, serial_number):
+    def get_mix_inverter_settings(self):
 
         """
         Gets the inverter settings related to battery modes
@@ -635,10 +750,11 @@ class GrowattApi:
         Returns:
         A dictionary of settings
         """
+        self.check_session()
 
         default_params = {
             'op': 'getMixSetParams',
-            'serialNum': serial_number,
+            'serialNum': self.device_sn,
             'kind': 0
         }
         settings_params = {**default_params}

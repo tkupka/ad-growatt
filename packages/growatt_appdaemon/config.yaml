@@ -8,8 +8,20 @@ input_button:
   adgw_set_charge_settings_button_battery_first: # button to set charge settings
     name: adgw_set_charge_settings_button_battery_first
     icon: mdi:export
+  adgw_set_charge_settings_button_battery_1_first: # button to set charge settings
+    name: adgw_set_charge_settings_button_battery_1_first
+    icon: mdi:export
   adgw_set_charge_settings_button_grid_first: # button to set charge settings
     name: adgw_set_charge_settings_button_grid_first
+    icon: mdi:export
+  adgw_set_settings_battery_series: # button to set battery series number
+    name: adgw_set_settings_battery_series
+    icon: mdi:export
+  adgw_set_settings_cv_voltage: # button to set CV Voltage
+    name: adgw_set_settings_cv_voltage
+    icon: mdi:export
+  adgw_set_settings_lv_voltage: # button to set LV voltage
+    name: adgw_set_settings_lv_voltage
     icon: mdi:export
 
 input_select:
@@ -24,23 +36,6 @@ input_select:
       - "40"
       - "50"
       - "60"
-      - "70"
-      - "80"
-      - "90"
-      - "100"
-
-  adgw_grid_charge_power: # grid charge power
-    name: adgw_grid_charge_power
-    icon: mdi:battery-bluetooth
-    options:
-      - "0"
-      - "10"
-      - "20"
-      - "30"
-      - "40"
-      - "50"
-      - "60"
-      - "65"
       - "70"
       - "80"
       - "90"
@@ -77,6 +72,50 @@ input_select:
       - "80"
       - "90"
       - "100"
+  adgw_battery_series_number: # lead acid bateries number
+    name: adgw_battery_series_number
+    icon: mdi:battery-bluetooth
+    options:
+      - "0"
+      - "12"
+      - "16"
+      - "18"
+      - "24"
+      - "36"
+  adgw_battery_charge_power: # Charge power
+    name: adgw_battery_charge_power
+    icon: mdi:battery-bluetooth
+    options:
+      - "0"
+      - "10"
+      - "20"
+      - "30"
+      - "40"
+      - "50"
+      - "60"
+      - "70"
+      - "80"
+      - "90"
+      - "100"
+
+input_number:
+  adgw_export_limit_power_rate: # export limit Power rate %
+    name: adgw_export_limit_power_rate
+    min: 0
+    max: 100
+    icon: mdi:battery-bluetooth
+  adgw_cv_voltage: # CV voltage
+    name: adgw_cv_voltage
+    min: 12
+    max: 15
+    step: 0.1
+    icon: mdi:battery-bluetooth
+  adgw_lv_voltage: # LV voltage
+    name: adgw_lv_voltage
+    min: 10
+    max: 12
+    step: 0.1
+    icon: mdi:battery-bluetooth
 
 input_datetime:
   adgw_battery_first_time_slot_1_end: # battery first, time inputs
@@ -89,6 +128,60 @@ input_datetime:
     icon: mdi:battery-clock
     has_date: false
     has_time: true
+  adgw_battery_first_time_slot_2_end: # battery first, time inputs
+    name: adgw_battery_first_time_slot_2_end
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_battery_first_time_slot_2_start:
+    has_time: true
+    name: adgw_battery_first_time_slot_2_start
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_battery_first_time_slot_3_end: # battery first, time inputs
+    name: adgw_battery_first_time_slot_3_end
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_battery_first_time_slot_3_start:
+    name: adgw_battery_first_time_slot_3_start
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_battery_first_time_slot_4_end: # battery first, time inputs
+    name: adgw_battery_first_time_slot_4_end
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_battery_first_time_slot_4_start:
+    name: adgw_battery_first_time_slot_4_start
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_battery_first_time_slot_5_end: # battery first, time inputs
+    name: adgw_battery_first_time_slot_5_end
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_battery_first_time_slot_5_start:
+    name: adgw_battery_first_time_slot_5_start
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_battery_first_time_slot_6_end: # battery first, time inputs
+    name: adgw_battery_first_time_slot_6_end
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_battery_first_time_slot_6_start:
+    name: adgw_battery_first_time_slot_6_start
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+
+
+
 
   adgw_grid_first_time_slot_1_end: # grid first, time inputs
     name: adgw_grid_first_time_slot_1_end
@@ -100,6 +193,27 @@ input_datetime:
     icon: mdi:battery-clock
     has_date: false
     has_time: true
+  adgw_grid_first_time_slot_2_end: # grid first, time inputs
+    name: adgw_grid_first_time_slot_2_end
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_grid_first_time_slot_2_start:
+    name: adgw_grid_first_time_slot_2_start
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_grid_first_time_slot_3_end: # grid first, time inputs
+    name: adgw_grid_first_time_slot_3_end
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+  adgw_grid_first_time_slot_3_start:
+    name: adgw_grid_first_time_slot_3_start
+    icon: mdi:battery-clock
+    has_date: false
+    has_time: true
+
 
 input_boolean:
   adgw_export_limit_on:
@@ -111,8 +225,29 @@ input_boolean:
   adgw_battery_first_time_slot_1_enabled: # switch, battery first
     name: adgw_battery_first_time_slot_1_enabled
     icon: mdi:toggle-switch-outline
+  adgw_battery_first_time_slot_2_enabled: # switch, battery first
+    name: adgw_battery_first_time_slot_2_enabled
+    icon: mdi:toggle-switch-outline
+  adgw_battery_first_time_slot_3_enabled: # switch, battery first
+    name: adgw_battery_first_time_slot_3_enabled
+    icon: mdi:toggle-switch-outline
+  adgw_battery_first_time_slot_4_enabled: # switch, battery first
+    name: adgw_battery_first_time_slot_4_enabled
+    icon: mdi:toggle-switch-outline
+  adgw_battery_first_time_slot_5_enabled: # switch, battery first
+    name: adgw_battery_first_time_slot_5_enabled
+    icon: mdi:toggle-switch-outline
+  adgw_battery_first_time_slot_6_enabled: # switch, battery first
+    name: adgw_battery_first_time_slot_6_enabled
+    icon: mdi:toggle-switch-outline
   adgw_grid_first_time_slot_1_enabled: # switch, grid first
     name: adgw_grid_first_time_slot_1_enabled
+    icon: mdi:toggle-switch-outline
+  adgw_grid_first_time_slot_2_enabled: # switch, grid first
+    name: adgw_grid_first_time_slot_2_enabled
+    icon: mdi:toggle-switch-outline
+  adgw_grid_first_time_slot_3_enabled: # switch, grid first
+    name: adgw_grid_first_time_slot_3_enabled
     icon: mdi:toggle-switch-outline
 
 script:
@@ -140,29 +275,30 @@ script:
           entity_id: input_button.adgw_set_charge_settings_button_export
     mode: single
     icon: "mdi:toggle-switch-outline"
-  # script to set battery first, can be called from Automations, eg. when power price is low
-  adgw_set_battery_first_on:
-    alias: adgw_battery_first_on
+    #Enables battery first fime slot in paramater [time_slot]
+  adgw_enable_battery_first_time_slot:
+    alias: adgw_enable_attery_first_time_slot
     sequence:
       - service: input_boolean.turn_on
         target:
-          entity_id: input_boolean.adgw_battery_first_time_slot_1_enabled
+          entity_id: input_boolean.adgw_battery_first_time_slot_{{time_slot}}_enabled
       - service: input_button.press
         target:
           entity_id: input_button.adgw_set_charge_settings_button_battery_first
     mode: single
     icon: "mdi:toggle-switch-outline"
-  adgw_set_battery_first_off:
-    alias: adgw_set_battery_first_off
+    #Disable battery first fime slot in paramater [time_slot]
+  adgw_disable_battery_first_time_slot:
+    alias: adgw_disable_battery_first_time_slot
     sequence:
       - service: input_boolean.turn_off
         target:
-          entity_id: input_boolean.adgw_battery_first_time_slot_1_enabled
+          entity_id: input_boolean.adgw_battery_first_time_slot_{{time_slot}}_enabled
       - service: input_button.press
         target:
           entity_id: input_button.adgw_set_charge_settings_button_battery_first
     mode: single
-    icon: "mdi:toggle-switch-outline"
+    icon: "mdi:toggle-switch-outline"    
 
 template:
   - sensor:
@@ -181,21 +317,55 @@ homeassistant:
   customize:
     input_boolean.adgw_export_limit_on:
       friendly_name: Export Limit On
+    input_number.adgw_export_limit_power_rate:
+        friendly_name: Limit Power Rate(%)
 
     # battery first
     input_select.adgw_battery_charge_max_soc:
       friendly_name: SoC Charge Max
-    input_select.adgw_grid_charge_power:
-      friendly_name: Charge Power %
+    input_select.adgw_battery_charge_power:
+      friendly_name: Charge Power Rate %
     input_datetime.adgw_battery_first_time_slot_1_end:
       friendly_name: Battery First - Time Slot 1 (End)
     input_datetime.adgw_battery_first_time_slot_1_start:
       friendly_name: Battery First - Time Slot 1 (Start)
+    input_datetime.adgw_battery_first_time_slot_2_end:
+      friendly_name: Battery First - Time Slot 2 (End)
+    input_datetime.adgw_battery_first_time_slot_2_start:
+      friendly_name: Battery First - Time Slot 2 (Start)      
+    input_datetime.adgw_battery_first_time_slot_3_end:
+      friendly_name: Battery First - Time Slot 3 (End)
+    input_datetime.adgw_battery_first_time_slot_3_start:
+      friendly_name: Battery First - Time Slot 3 (Start)
+    input_datetime.adgw_battery_first_time_slot_4_end:
+      friendly_name: Battery First - Time Slot 4 (End)
+    input_datetime.adgw_battery_first_time_slot_4_start:
+      friendly_name: Battery First - Time Slot 4 (Start)
+    input_datetime.adgw_battery_first_time_slot_5_end:
+      friendly_name: Battery First - Time Slot 5 (End)
+    input_datetime.adgw_battery_first_time_slot_5_start:
+      friendly_name: Battery First - Time Slot 5 (Start)
+    input_datetime.adgw_battery_first_time_slot_6_end:
+      friendly_name: Battery First - Time Slot 6 (End)
+    input_datetime.adgw_battery_first_time_slot_6_start:
+      friendly_name: Battery First - Time Slot 6 (Start)
+      
+      
     input_boolean.adgw_ac_charge_on:
       friendly_name: AC Charge On
     input_boolean.adgw_battery_first_time_slot_1_enabled:
       friendly_name: Battery First - Time Slot 1 Enabled
-
+    input_boolean.adgw_battery_first_time_slot_2_enabled:
+      friendly_name: Battery First - Time Slot 2 Enabled
+    input_boolean.adgw_battery_first_time_slot_3_enabled:
+      friendly_name: Battery First - Time Slot 3 Enabled
+    input_boolean.adgw_battery_first_time_slot_4_enabled:
+      friendly_name: Battery First - Time Slot 4 Enabled
+    input_boolean.adgw_battery_first_time_slot_5_enabled:
+      friendly_name: Battery First - Time Slot 5 Enabled
+    input_boolean.adgw_battery_first_time_slot_6_enabled:
+      friendly_name: Battery First - Time Slot 6 Enabled
+      
     # grid first
     input_select.adgw_grid_discharge_stopped_soc:
       friendly_name: Discharge Stopped SoC
@@ -207,7 +377,25 @@ homeassistant:
       friendly_name: Grid First - Time Slot 1 (Start)
     input_boolean.adgw_grid_first_time_slot_1_enabled:
       friendly_name: Grid First - Time Slot 1 Enabled
-
+    input_datetime.adgw_grid_first_time_slot_2_end:
+      friendly_name: Grid First - Time Slot 2 (End)
+    input_datetime.adgw_grid_first_time_slot_2_start:
+      friendly_name: Grid First - Time Slot 2 (Start)
+    input_boolean.adgw_grid_first_time_slot_2_enabled:
+      friendly_name: Grid First - Time Slot 2 Enabled
+    input_datetime.adgw_grid_first_time_slot_3_end:
+      friendly_name: Grid First - Time Slot 3 (End)
+    input_datetime.adgw_grid_first_time_slot_3_start:
+      friendly_name: Grid First - Time Slot 3 (Start)
+    input_boolean.adgw_grid_first_time_slot_3_enabled:
+      friendly_name: Grid First - Time Slot 3 Enabled
+    # aux setting
+    input_select.adgw_battery_series_number:
+      friendly_name: Lead-acid series Num
+    input_number.adgw_cv_voltage:
+        friendly_name: CV Voltage (12.0~15.0V)
+    input_number.adgw_lv_voltage:
+        friendly_name: Lv Voltage (10.0~12.0V)
     # buttons etc
     sensor.template_adgw_api_state:
       friendly_name: API status
@@ -217,5 +405,14 @@ homeassistant:
       friendly_name: Save export limit settings
     input_button.adgw_set_charge_settings_button_battery_first:
       friendly_name: Save battery first settings
+    input_button.adgw_set_charge_settings_button_battery_1_first:
+      friendly_name: Save battery first 1 settings
     input_button.adgw_set_charge_settings_button_grid_first:
       friendly_name: Save grid first settings
+    input_button.adgw_set_settings_battery_series:
+      friendly_name: Save battery series
+    input_button.adgw_set_settings_cv_voltage:
+      friendly_name: Save CV Voltage
+    input_button.adgw_set_settings_lv_voltage:
+      friendly_name: Save LV Voltage
+      
