@@ -24,6 +24,71 @@ v.041 September 26. 2023: Changed initialization to more correctly show if there
 
 v.05 March 16. 2024: Growatt communication re-engeneered to avoid blocking, new settings
 
+
+# Installation
+The steps to set up is:
+
+1. If you have the old Growatt integration installed, remove it, as it might trigger the server block on Growatt servers. For monitoring, use Grott https://github.com/johanmeijer/grott. This step is optional but will improve stability greatly.
+
+2. Install AppDaemon from Add-ons in HA
+
+	* Modify configuration file `ADDON_CONFIGS\a0d7b954_appdaemon\appdaemon.yaml` and add link to secrets if missing
+```
+secrets: /homeassistant/secrets.yaml
+appdaemon:
+  latitude: xx.xxxxx
+  longitude: x.xxxxxx
+  elevation: 2
+  time_zone: Europe/Amsterdam
+  plugins:
+    HASS:
+      type: hass
+http:
+  url: http://127.0.0.1:5050
+  transport: socketio
+admin:
+api:
+hadashboard:
+```
+
+	
+
+3. Copy directory from `ad-growatt/appdaemon/`  on Github to your  directory `ADDON_CONFIGS/a0d7b954_appdaemon/`
+
+4. Copy directory from `ad-growatt/packages/`  on Github to your  directory `/config/`
+
+
+4. Modify /config/configuration.yaml to include
+```
+homeassistant:
+  packages: !include_dir_named packages
+```
+
+5. Modify /config/secrets to include:
+```
+growatt_username: X
+growatt_password: X
+growatt_device: X
+```
+Replacing X’s with login, password and Device Serial Number (found on main page of Growatt Server: Login Page https://server.growatt.com/)
+
+6. Restart HA, or just reload HA configuration and restart AppDaemon
+
+7. Create the Lovelace card, see code above
+
+Enjoy controlling your Growatt inverter directly from HA !!
+
+# UI Dependencies
+Following dependencies are used in UI card:
+
+* <a href="https://github.com/kinghat/tabbed-card">Tabbed Card</a>
+* <a href="https://github.com/custom-cards/stack-in-card">Stack In Card</a>
+* <a href="https://github.com/mattieha/slider-button-card">Slider button card</a>
+* <a href="https://github.com/custom-cards/button-card">Button Card</a>
+* <a href="https://github.com/GeorgeSG/lovelace-time-picker-card">Time Picker Card</a>
+* <a href="https://github.com/custom-cards/button-card">Button Card</a>
+ 
+
 # Lovelace card
 ```
 type: vertical-stack
@@ -1171,71 +1236,6 @@ cards:
 
 ```
 ![image](./ui.png)
-
-
-# Installation
-The steps to set up is:
-
-1. If you have the old Growatt integration installed, remove it, as it might trigger the server block on Growatt servers. For monitoring, use Grott https://github.com/johanmeijer/grott. This step is optional but will improve stability greatly.
-
-2. Install AppDaemon from Add-ons in HA
-
-	* Modify configuration file `ADDON_CONFIGS\a0d7b954_appdaemon\appdaemon.yaml` and add link to secrets if missing
-```
-secrets: /homeassistant/secrets.yaml
-appdaemon:
-  latitude: xx.xxxxx
-  longitude: x.xxxxxx
-  elevation: 2
-  time_zone: Europe/Amsterdam
-  plugins:
-    HASS:
-      type: hass
-http:
-  url: http://127.0.0.1:5050
-  transport: socketio
-admin:
-api:
-hadashboard:
-```
-
-	
-
-3. Copy directory from `ad-growatt/appdaemon/`  on Github to your  directory `ADDON_CONFIGS/a0d7b954_appdaemon/`
-
-4. Copy directory from `ad-growatt/packages/`  on Github to your  directory `/config/`
-
-
-4. Modify /config/configuration.yaml to include
-```
-homeassistant:
-  packages: !include_dir_named packages
-```
-
-5. Modify /config/secrets to include:
-```
-growatt_username: X
-growatt_password: X
-growatt_device: X
-```
-Replacing X’s with login, password and Device Serial Number (found on main page of Growatt Server: Login Page https://server.growatt.com/)
-
-6. Restart HA, or just reload HA configuration and restart AppDaemon
-
-7. Create the Lovelace card, see code above
-
-Enjoy controlling your Growatt inverter directly from HA !!
-
-#UI Dependencies
-Following dependencies are used in UI card:
-
-* <a href="https://github.com/kinghat/tabbed-card">Tabbed Card</a>
-* <a href="https://github.com/custom-cards/stack-in-card">Stack In Card</a>
-* <a href="https://github.com/mattieha/slider-button-card">Slider button card</a>
-* <a href="https://github.com/custom-cards/button-card">Button Card</a>
-* <a href="https://github.com/GeorgeSG/lovelace-time-picker-card">Time Picker Card</a>
-* <a href="https://github.com/custom-cards/button-card">Button Card</a>
- 
 
 
 
