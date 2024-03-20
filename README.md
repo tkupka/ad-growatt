@@ -1221,6 +1221,9 @@ cards:
             - entity: input_number.adgw_export_limit_power_rate
             - entity: input_button.adgw_set_charge_settings_button_export
             - type: divider
+            - entity: input_number.adgw_active_power_rate
+            - entity: input_button.adgw_set_active_power_rate
+            - type: divider
             - entity: input_number.adgw_cv_voltage
             - entity: input_button.adgw_set_settings_cv_voltage
             - type: divider
@@ -1233,6 +1236,7 @@ cards:
     entities:
       - entity: input_button.adgw_get_charge_settings_button
       - entity: sensor.template_adgw_api_state
+
 
 ```
 ![image](./ui.png)

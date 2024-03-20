@@ -23,6 +23,9 @@ input_button:
   adgw_set_settings_lv_voltage: # button to set LV voltage
     name: adgw_set_settings_lv_voltage
     icon: mdi:export
+  adgw_set_active_power_rate: # button set active power rate
+    name: adgw_set_active_power_rate
+    icon: mdi:transmission-tower-import
 
 input_select:
   adgw_battery_charge_max_soc: # battery charge max SOC
@@ -115,6 +118,11 @@ input_number:
     min: 10
     max: 12
     step: 0.1
+    icon: mdi:battery-bluetooth
+  adgw_active_power_rate: # active Power rate %
+    name: adgw_active_power_rate
+    min: 0
+    max: 100
     icon: mdi:battery-bluetooth
 
 input_datetime:
@@ -319,6 +327,8 @@ homeassistant:
       friendly_name: Export Limit On
     input_number.adgw_export_limit_power_rate:
         friendly_name: Limit Power Rate(%)
+    input_number.adgw_active_power_rate:
+        friendly_name: Active Power Rate(%)
 
     # battery first
     input_select.adgw_battery_charge_max_soc:
@@ -415,4 +425,5 @@ homeassistant:
       friendly_name: Save CV Voltage
     input_button.adgw_set_settings_lv_voltage:
       friendly_name: Save LV Voltage
-      
+    input_button.adgw_set_active_power_rate:
+      friendly_name: Save active power rate

@@ -34,16 +34,18 @@ class GrowattApi:
     username = 'undefined'
     password = 'undefined'
     device_sn = 'undefined'
+    settings_action = 'mixSet'
     agent_identifier_pattern = "Dalvik/2.0.0 (Linux; U; Android 13; HA:%s%s)"
     login_time = datetime.datetime.now()
     user_data = ''
     
 
-    def __init__(self, username, password, device_sn, hass, logger, add_random_user_id=False, agent_identifier=None):
+    def __init__(self, username, password, device_sn, hass, logger, settings_action='mixSet', add_random_user_id=False, agent_identifier=None):
     
         self.username = username
         self.password = password
         self.device_sn = device_sn
+        self.settings_action = settings_action
         self.hass = hass #just for logging
         self.logger = logger #just for logging
         if (agent_identifier != None):
@@ -187,7 +189,6 @@ class GrowattApi:
         
         })
         self.hass.log("Headers: %s" % headers)
-        self.hass.log("Login URL: %s" % self.get_url('newTwoLoginAPI.do'))
         self.hass.log("Login user: %s" % self.username)
         self.hass.log("Login Password: %s" % password)
         self.hass.log("Login Response from Growatt: %s" % response)
@@ -725,7 +726,7 @@ class GrowattApi:
         setting_parameters['deviceType'] = '17'
         default_params = {
             'op': 'mixSetApiNew',
-            'action': 'mixSet',
+            'action': self.settings_action,
             'serialNum': self.device_sn,
             'type': setting_type
         }
@@ -760,4 +761,5 @@ class GrowattApi:
         settings_params = {**default_params}
         response = self.session.get(self.get_url('newMixApi.do'), params=default_params)
         data = json.loads(response.content.decode('utf-8'))
+        self.hass.log("Response from growat: %s" % data)
         return data

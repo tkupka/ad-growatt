@@ -12,9 +12,10 @@ class AD_Growatt(hass.Hass):
         un = self.args["growatt_username"]
         pwd = self.args["growatt_password"]
         device_sn = self.args["growatt_device"]
+        settings_action = self.args["settings_action"]
         self.ui_logger = stateLogger.StateLogger(self) #loghger instatnce for UI
         #Obtain the server using the api
-        self.api = growattServer.GrowattApi(un, pwd, device_sn, self, self.ui_logger) #get an instance of the api, using a random string as the ID
+        self.api = growattServer.GrowattApi(un, pwd, device_sn, self, self.ui_logger, settings_action) #get an instance of the api, using a random string as the ID
         
         
         self.listen_state(self.get_charge_settings, "input_button.adgw_get_charge_settings_button")
@@ -25,14 +26,17 @@ class AD_Growatt(hass.Hass):
         self.listen_state(self.set_settings_battery_series_number_handler, "input_button.adgw_set_settings_battery_series")
         self.listen_state(self.set_settings_lv_voltage_handler, "input_button.adgw_set_settings_lv_voltage")
         self.listen_state(self.set_settings_cv_voltage_handler, "input_button.adgw_set_settings_cv_voltage")
+        self.listen_state(self.set_active_power_rate_handler, "input_button.adgw_set_active_power_rate")
         #call get_charge_settings by pressing Get charge settings button
         self.call_service("input_button/press", entity_id="input_button.adgw_get_charge_settings_button")
 
     def get_charge_settings(self, entity, attribute, old, new, kwargs):
         response = self.api.get_mix_inverter_settings()
-        self.log("Response from growat:")
-        self.log(response['obj'])
 
+        #If not hybrind inverter no data
+        if (response['obj']) == "":
+            return True
+                
         # Populate Export
         if (response['obj']['mixBean']['exportLimit']) == "1":
             self.set_state ("input_boolean.adgw_export_limit_on", state = "on")
@@ -122,6 +126,9 @@ class AD_Growatt(hass.Hass):
         #populate voltage
         self.set_state("input_number.adgw_cv_voltage", state = response['obj']['mixBean']['cvVoltage'])
         self.set_state("input_number.adgw_lv_voltage", state = response['obj']['mixBean']['lvVoltage'])
+        
+        self.set_state("input_number.adgw_active_power_rate", state = response['obj']['mixBean']['activeRate'])
+        
 
         
         #List all key pairs from response to log. Comment out before going into production
@@ -143,16 +150,25 @@ class AD_Growatt(hass.Hass):
                                 export_limit_power_rate] #0% export limit means all export is stopped
         response = self.api.update_mix_inverter_setting('backflow_setting', schedule_settings)
         return self.log_response(response, "Export saved")
-        #if response['success'] == True:
-        #    self.ui_logger.info("Export saved")
-        #    return True
-        #else:
-        #    self.ui_logger.error("Error saving Export limit: "  + response['msg'])
-        #    return False
+
 
     def set_charge_settings_export_handler(self, entity, attribute, old, new, kwargs):
         for attempt in range(5):
             if self.set_charge_settings_export() == True:
+                break
+                
+    def set_active_power_rate(self):
+
+        # Export limit save
+        active_power_rate = round(float(self.get_state("input_number.adgw_active_power_rate")))
+        rate_settings = [active_power_rate] #0% export limit means all export is stopped
+        response = self.api.update_mix_inverter_setting('pv_active_p_rate', rate_settings)
+        return self.log_response(response, "Power Rate Saved")
+
+
+    def set_active_power_rate_handler(self, entity, attribute, old, new, kwargs):
+        for attempt in range(5):
+            if self.set_active_power_rate() == True:
                 break
 
     def set_charge_settings_battery(self):
