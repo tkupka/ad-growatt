@@ -5,5 +5,5 @@ get_charge_settings:
   growatt_username: !secret growatt_username
   growatt_password: !secret growatt_password
   growatt_device: !secret growatt_device
-  #optional for non hybrid inverters
-  #settings_action: 'maxSet'
+  #optional for non hybrid inverters (maxSet)
+  settings_action: 'mixSet'
