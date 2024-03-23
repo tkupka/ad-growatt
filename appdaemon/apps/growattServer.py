@@ -737,6 +737,8 @@ class GrowattApi:
             action = 'tcpSet.do'
         self.hass.log("Action: [%s], Setting param: %s"%(action, settings_params))
         response = self.session.post(self.get_url(action), params=settings_params)
+        self.hass.log("Set Inverter settings [status=%s], response: %s" % (response.status_code, response.content))
+        
         data = json.loads(response.content.decode('utf-8'))
         return data
 

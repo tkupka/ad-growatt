@@ -34,7 +34,7 @@ class AD_Growatt(hass.Hass):
         response = self.api.get_mix_inverter_settings()
 
         #If not hybrind inverter no data
-        if not data['obj']:
+        if not response['obj']:
             return True
                 
         # Populate Export
