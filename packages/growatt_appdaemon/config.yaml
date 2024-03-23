@@ -79,9 +79,7 @@ input_select:
     name: adgw_battery_series_number
     icon: mdi:battery-bluetooth
     options:
-      - "0"
       - "12"
-      - "16"
       - "18"
       - "24"
       - "36"

@@ -66,9 +66,9 @@ homeassistant:
 
 5. Modify /config/secrets to include:
 ```
-growatt_username: X
-growatt_password: X
-growatt_device: X
+growatt_username: XXX
+growatt_password: XXX
+growatt_device: XXX
 ```
 Replacing X’s with login, password and Device Serial Number (found on main page of Growatt Server: Login Page https://server.growatt.com/)
 
@@ -83,10 +83,10 @@ Following dependencies are used by UI card:
 
 * <a href="https://github.com/kinghat/tabbed-card">Tabbed Card</a>
 * <a href="https://github.com/custom-cards/stack-in-card">Stack In Card</a>
-* <a href="https://github.com/mattieha/slider-button-card">Slider button card</a>
+* <a href="https://github.com/thomasloven/lovelace-card-mod">Card Mod</a>
 * <a href="https://github.com/custom-cards/button-card">Button Card</a>
 * <a href="https://github.com/GeorgeSG/lovelace-time-picker-card">Time Picker Card</a>
-* <a href="https://github.com/custom-cards/button-card">Button Card</a>
+
  
 
 # Lovelace card
@@ -133,35 +133,8 @@ cards:
                       --ha-card-border-width: 0;
                     }
               cards:
-                - type: custom:slider-button-card
-                  entity: input_boolean.adgw_battery_first_time_slot_6_enabled
-                  name: Battery First Timeslots
-                  slider:
-                    direction: left-right
-                    background: solid
-                    use_state_color: false
-                    use_percentage_bg_opacity: false
-                    show_track: false
-                    toggle_on_click: false
-                    force_square: false
-                    show_attribute: false
-                  show_name: true
-                  show_state: false
-                  compact: true
-                  icon:
-                    show: false
-                    use_state_color: false
-                    tap_action:
-                      action: none
-                    icon: ''
-                  action_button:
-                    mode: toggle
-                    icon: mdi:power
-                    show: false
-                    show_spinner: true
-                    tap_action:
-                      action: toggle
-                  show_attribute: false
+                - type: custom:mushroom-title-card
+                  title: Battery First Timeslots
                 - type: custom:stack-in-card
                   mode: horizontal
                   keep:
@@ -498,35 +471,8 @@ cards:
                       --ha-card-border-width: 0;
                     }
               cards:
-                - type: custom:slider-button-card
-                  entity: input_boolean.adgw_grid_first_time_slot_2_enabled
-                  name: Battery First 1 Timeslots
-                  slider:
-                    direction: left-right
-                    background: solid
-                    use_state_color: false
-                    use_percentage_bg_opacity: false
-                    show_track: false
-                    toggle_on_click: false
-                    force_square: false
-                    show_attribute: false
-                  show_name: true
-                  show_state: false
-                  compact: true
-                  icon:
-                    show: false
-                    use_state_color: false
-                    tap_action:
-                      action: none
-                    icon: ''
-                  action_button:
-                    mode: toggle
-                    icon: mdi:power
-                    show: false
-                    show_spinner: true
-                    tap_action:
-                      action: toggle
-                  show_attribute: false
+                - type: custom:mushroom-title-card
+                  title: Battery First 1 Timeslots
                 - type: custom:stack-in-card
                   mode: horizontal
                   keep:
@@ -874,35 +820,8 @@ cards:
                       --ha-card-border-width: 0;
                     }
               cards:
-                - type: custom:slider-button-card
-                  entity: input_boolean.adgw_battery_first_time_slot_2_enabled
-                  name: Battery First Timeslots
-                  slider:
-                    direction: left-right
-                    background: solid
-                    use_state_color: false
-                    use_percentage_bg_opacity: false
-                    show_track: false
-                    toggle_on_click: false
-                    force_square: false
-                    show_attribute: false
-                  show_name: true
-                  show_state: false
-                  compact: true
-                  icon:
-                    show: false
-                    use_state_color: false
-                    tap_action:
-                      action: none
-                    icon: ''
-                  action_button:
-                    mode: toggle
-                    icon: mdi:power
-                    show: false
-                    show_spinner: true
-                    tap_action:
-                      action: toggle
-                  show_attribute: false
+                - type: custom:mushroom-title-card
+                  title: Grid First Timeslots
                 - type: custom:stack-in-card
                   mode: horizontal
                   keep:
