@@ -161,8 +161,9 @@ class AD_Growatt(hass.Hass):
 
         # Export limit save
         active_power_rate = round(float(self.get_state("input_number.adgw_active_power_rate")))
-        rate_settings = [active_power_rate] #0% export limit means all export is stopped
-        response = self.api.update_mix_inverter_setting('pv_active_p_rate', rate_settings)
+        rate_settings = [active_power_rate, #0% Power rate
+                         1] #magic constant
+        response = self.api.update_mix_inverter_setting('pv_active_p_rate', rate_settings, True)
         return self.log_response(response, "Power Rate Saved")
 
 
