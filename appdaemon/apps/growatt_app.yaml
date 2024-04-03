@@ -7,3 +7,4 @@ get_charge_settings:
   growatt_device: !secret growatt_device
   #optional for non hybrid inverters (maxSet)
   settings_action: 'mixSet'
+  

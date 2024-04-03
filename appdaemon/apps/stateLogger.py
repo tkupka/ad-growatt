@@ -1,6 +1,5 @@
 name = "stateLogger"
 
-import time
 import datetime
 
 class StateLogger:

@@ -1,7 +1,6 @@
 import hassapi as hass
 import growattServer
 import stateLogger
-import time
 
 class AD_Growatt(hass.Hass):
 
@@ -27,6 +26,7 @@ class AD_Growatt(hass.Hass):
         self.listen_state(self.set_settings_lv_voltage_handler, "input_button.adgw_set_settings_lv_voltage")
         self.listen_state(self.set_settings_cv_voltage_handler, "input_button.adgw_set_settings_cv_voltage")
         self.listen_state(self.set_active_power_rate_handler, "input_button.adgw_set_active_power_rate")
+        self.listen_state(self.set_cc_current_handler, "input_button.adgw_set_cc_current")
         #call get_charge_settings by pressing Get charge settings button
         self.call_service("input_button/press", entity_id="input_button.adgw_get_charge_settings_button")
 
@@ -128,6 +128,8 @@ class AD_Growatt(hass.Hass):
         self.set_state("input_number.adgw_lv_voltage", state = response['obj']['mixBean']['lvVoltage'])
         
         self.set_state("input_number.adgw_active_power_rate", state = response['obj']['mixBean']['activeRate'])
+        
+        self.set_state("input_number.adgw_cc_current", state = response['obj']['mixBean']['ccCurrent'])
         
 
         
@@ -315,7 +317,6 @@ class AD_Growatt(hass.Hass):
                 break
 
     def set_settings_battery_series_number(self):
-
         # Battery series settings
         series_number = self.get_state("input_select.adgw_battery_series_number")
         battery_settings = [series_number] 
@@ -329,7 +330,6 @@ class AD_Growatt(hass.Hass):
                 break
 
     def set_settings_cv_voltage(self):
-
         # CV voltage
         cv_voltage = self.get_state("input_number.adgw_cv_voltage")
         voltage_settings = [cv_voltage] 
@@ -343,7 +343,6 @@ class AD_Growatt(hass.Hass):
                 break                
 
     def set_settings_lv_voltage(self):
-
         # Battery series settings
         lv_voltage = self.get_state("input_number.adgw_lv_voltage")
         voltage_settings = [lv_voltage] 
@@ -355,7 +354,21 @@ class AD_Growatt(hass.Hass):
         for attempt in range(5):
             if self.set_settings_lv_voltage() == True:
                 break                
-                                
+
+    def set_cc_current(self):
+        cc_current = self.get_state("input_number.adgw_cc_current")
+        cc_current_settings = [cc_current] 
+        # The api call - specifically for the mix inverter. Some other op will need to be applied if you dont have a mix inverter (replace 'mix_ac_charge_time_period')
+        response = self.api.update_mix_inverter_setting('mix_cc_current', cc_current_settings, True)
+        return self.log_response(response, "CC Current Saved")
+
+
+    def set_cc_current_handler(self, entity, attribute, old, new, kwargs):
+        for attempt in range(5):
+            if self.set_cc_current() == True:
+                break                
+
+
 
     def log_response(self, response, message):
         self.log("Response for action [%s] from growat:%s"%(message, response))

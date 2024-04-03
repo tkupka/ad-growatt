@@ -112,11 +112,6 @@ cards:
                 margin: 0px;
               }
           cards:
-            - type: entities
-              entities:
-                - entity: input_select.adgw_battery_charge_power
-                - entity: input_select.adgw_battery_charge_max_soc
-                - entity: input_boolean.adgw_ac_charge_on
             - type: custom:stack-in-card
               mode: vertical
               keep:
@@ -433,6 +428,18 @@ cards:
                                 border: none;
                                 background: none;
                               }
+                - type: entities
+                  entities:
+                    - type: divider
+                    - entity: input_select.adgw_battery_charge_power
+                    - entity: input_select.adgw_battery_charge_max_soc
+                    - entity: input_boolean.adgw_ac_charge_on
+                  card_mod:
+                    style: |
+                      ha-card div {
+                        padding-top: 0px !important;
+                        padding-bottom: 0px !important;
+                      }
                 - type: entities
                   card_mod:
                     style: |
@@ -800,10 +807,6 @@ cards:
         card:
           type: vertical-stack
           cards:
-            - type: entities
-              entities:
-                - entity: input_select.adgw_grid_discharge_power
-                - entity: input_select.adgw_grid_discharge_stopped_soc
             - type: custom:stack-in-card
               mode: vertical
               keep:
@@ -1121,6 +1124,17 @@ cards:
                                 background: none;
                               }
                 - type: entities
+                  entities:
+                    - type: divider
+                    - entity: input_select.adgw_grid_discharge_power
+                    - entity: input_select.adgw_grid_discharge_stopped_soc
+                  card_mod:
+                    style: |
+                      ha-card div {
+                        padding-top: 0px !important;
+                        padding-bottom: 0px !important;
+                      }
+                - type: entities
                   card_mod:
                     style: |
                       ha-card div {
@@ -1140,6 +1154,9 @@ cards:
             - entity: input_number.adgw_export_limit_power_rate
             - entity: input_button.adgw_set_charge_settings_button_export
             - type: divider
+            - entity: input_number.adgw_cc_current
+            - entity: input_button.adgw_set_cc_current
+            - type: divider
             - entity: input_number.adgw_active_power_rate
             - entity: input_button.adgw_set_active_power_rate
             - type: divider
@@ -1155,7 +1172,6 @@ cards:
     entities:
       - entity: input_button.adgw_get_charge_settings_button
       - entity: sensor.template_adgw_api_state
-
 
 ```
 ![image](./ui.png)

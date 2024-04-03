@@ -27,8 +27,8 @@ class Timespan(IntEnum):
 
 class GrowattApi:
     
-    hass = ''
-    logger = ''
+    hass = 'undefined'
+    logger = 'undefined'
     sesion_duration = timedelta(minutes=30)
     server_url = 'https://openapi.growatt.com/'
     username = 'undefined'

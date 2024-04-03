@@ -19,18 +19,22 @@ input_button:
     icon: mdi:export
   adgw_set_settings_cv_voltage: # button to set CV Voltage
     name: adgw_set_settings_cv_voltage
-    icon: mdi:export
+    icon: mdi:flash-triangle-outline
   adgw_set_settings_lv_voltage: # button to set LV voltage
     name: adgw_set_settings_lv_voltage
-    icon: mdi:export
+    icon: mdi:flash-triangle-outline
   adgw_set_active_power_rate: # button set active power rate
     name: adgw_set_active_power_rate
     icon: mdi:transmission-tower-import
+  adgw_set_cc_current: # button set active power rate
+    name: adgw_set_cc_current
+    icon: mdi:current-dc
+
 
 input_select:
   adgw_battery_charge_max_soc: # battery charge max SOC
     name: adgw_battery_charge_max_soc
-    icon: mdi:battery-bluetooth
+    icon: mdi:battery-90
     options:
       - "0"
       - "10"
@@ -46,7 +50,7 @@ input_select:
 
   adgw_grid_discharge_stopped_soc: # grid discharge stopped SOC
     name: adgw_grid_discharge_stopped_soc
-    icon: mdi:battery-bluetooth
+    icon: mdi:battery-low
     options:
       - "0"
       - "10"
@@ -62,7 +66,7 @@ input_select:
 
   adgw_grid_discharge_power: # grid discharge power
     name: adgw_grid_discharge_power
-    icon: mdi:battery-bluetooth
+    icon: mdi:battery-negative
     options:
       - "0"
       - "10"
@@ -85,7 +89,7 @@ input_select:
       - "36"
   adgw_battery_charge_power: # Charge power
     name: adgw_battery_charge_power
-    icon: mdi:battery-bluetooth
+    icon: mdi:power-plug-battery
     options:
       - "0"
       - "10"
@@ -104,24 +108,32 @@ input_number:
     name: adgw_export_limit_power_rate
     min: 0
     max: 100
-    icon: mdi:battery-bluetooth
+    icon: mdi:power-plug-outline
   adgw_cv_voltage: # CV voltage
     name: adgw_cv_voltage
     min: 12
     max: 15
     step: 0.1
-    icon: mdi:battery-bluetooth
+    icon: mdi:flash-triangle-outline
   adgw_lv_voltage: # LV voltage
     name: adgw_lv_voltage
     min: 10
     max: 12
     step: 0.1
-    icon: mdi:battery-bluetooth
+    icon: mdi:flash-triangle-outline
   adgw_active_power_rate: # active Power rate %
     name: adgw_active_power_rate
     min: 0
     max: 100
-    icon: mdi:battery-bluetooth
+    icon: mdi:transmission-tower-import
+  adgw_cc_current: # max cc current in A
+    name: adgw_cc_current
+    min: 1
+    max: 25
+    step: 1
+    initial: 15
+    unit_of_measurement: 'A'
+    icon: mdi:current-dc
 
 input_datetime:
   adgw_battery_first_time_slot_1_end: # battery first, time inputs
@@ -140,7 +152,6 @@ input_datetime:
     has_date: false
     has_time: true
   adgw_battery_first_time_slot_2_start:
-    has_time: true
     name: adgw_battery_first_time_slot_2_start
     icon: mdi:battery-clock
     has_date: false
@@ -327,6 +338,9 @@ homeassistant:
         friendly_name: Limit Power Rate(%)
     input_number.adgw_active_power_rate:
         friendly_name: Active Power Rate(%)
+    input_number.adgw_cc_current:
+        friendly_name: CC Current (A)
+        
 
     # battery first
     input_select.adgw_battery_charge_max_soc:
@@ -425,3 +439,6 @@ homeassistant:
       friendly_name: Save LV Voltage
     input_button.adgw_set_active_power_rate:
       friendly_name: Save active power rate
+    input_button.adgw_set_cc_current:
+      friendly_name: Save CC Current      
+      
